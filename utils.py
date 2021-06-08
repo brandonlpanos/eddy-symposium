@@ -95,7 +95,8 @@ def animate_mask(obs, obs_type, centroids, clr_dic, save_path=None):
 
 
     raster = obs.raster("Mg II k")
-    raster_inds = find_closest_raster( raster, sji )
+    try: raster_inds = find_closest_raster( raster, sji )
+    except: raster_inds = [find_closest_raster( raster, sji, i )[0] for i in range(sji.n_steps)]
 
     #------------ fucntion for labeling profiles with there closest centroids --------------
 
@@ -152,7 +153,7 @@ def animate_mask(obs, obs_type, centroids, clr_dic, save_path=None):
     sltypos = np.linspace( 0, image.shape[0]-1, N, dtype=np.int )
     sji_flare_mask=labels[0][sltypos]
     clr_mask = [clr_dic.get(sji_flare_mask[i],'grey') for i in range(len(sji_flare_mask))]
-    fig = plt.figure( figsize=(12,12) )
+    fig = plt.figure( figsize=(8,8) )
     im = plt.imshow( -image, cmap="Greys", origin='lower' )
     scat = plt.scatter( [sltxpos]*N, sltypos, c=clr_mask, marker='s', s=6, alpha=.9)
 
